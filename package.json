@@ -40,5 +40,6 @@
     "node-canvas": "Automattic/node-canvas"
   },
   "dependencies": {
+    "firebase": "^4.0.0"
   }
 }

@@ -1,76 +1,99 @@
+import firebase from 'firebase'
+
 const NATURE = {
   mutable: false,
   resizable: true,
   rotatable: true,
   properties : [{
-    type: 'number',
-    label: 'value',
-    name: 'value',
-    property: 'value'
-  },{
-    type: 'angle',
-    label: 'angle property',
-    name: 'propAngle',
-    property: 'propAngle'
+    type: 'string',
+    label: 'API Key',
+    name: 'apiKey',
+    property: 'apiKey'
   },{
     type: 'string',
-    label: 'string property',
-    name: 'propString',
-    property: 'propString'
+    label: 'Auth Domain',
+    name: 'authDomain',
+    property: 'authDomain'
   },{
-    type: 'color',
-    label: 'color property',
-    name: 'propColor',
-    property: 'propColor'
+    type: 'string',
+    label: 'Database URL',
+    name: 'databaseURL',
+    property: 'databaseURL'
+  },{
+    type: 'string',
+    label: 'Project ID',
+    name: 'projectId',
+    property: 'projectId'
+  },{
+    type: 'string',
+    label: 'Storage Bucket',
+    name: 'storageBucket',
+    property: 'storageBucket'
+  },{
+    type: 'string',
+    label: 'Messaging Sender Id',
+    name: 'messagingSenderId',
+    property: 'messagingSenderId'
   }]
 }
 
-var { ValueHolder, RectPath, Shape } = scene
+var { RectPath, Shape } = scene
 
-export default class Firebase extends ValueHolder(RectPath(Shape)) {
+export default class Firebase extends RectPath(Shape) {
+
+  created() {
+    var {
+      apiKey,
+      authDomain,
+      databaseURL,
+      projectId,
+      storageBucket,
+      messagingSenderId
+    } = this.model
+
+    firebase.initializeApp({ apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId })
+    this._database = firebase.database();
+
+    console.log(firebase.app().name);  // "[DEFAULT]"
+
+    // var ref = firebase.database().ref('/bluetoothscan');
+    var ref = firebase.database().ref().child('bluetoothscan');
+    ref.once('value', function(snapshot) {
+      console.log(snapshot);
+      snapshot.forEach(function(childSnapshot) {
+        console.log(childSnapshot.key(), childSnapshot.val());
+      });
+    });
+  }
+
+  disposed() {
+    // this._database && ..
+  }
 
   _draw(context) {
+
     var {
-      top,
       left,
-      height,
+      top,
       width,
-      backgroundColor = 'transparent',
-      reverse
-    } = this.model;
+      height,
+      fillStyle,
+      strokeStyle
+    } = this.bounds;
 
-    this.animOnValueChange(this.value);
-
-    // background의 색상
     context.beginPath();
-    context.rect(left, top, width, height);
 
-    context.fillStyle = backgroundColor;
+    context.fillStyle = fillStyle;
+    context.strokeStyle = strokeStyle;
+
+    context.rect(left, top, width * 0.8, height * 0.8);
     context.fill();
-
-    // value의 색상
-    context.beginPath();
-
-    var drawValue = width - width * Math.max(Math.min(this.animValue, 100), 0) / 100;
-    drawValue = Math.max(Math.min(drawValue, width), 0);
-
-    context.rect(left + drawValue, top, width - drawValue, height);
-
-    this.drawFill(context);
-
-    context.closePath();
+    context.stroke();
 
     context.beginPath();
 
-    context.rect(left, top, width, height);
+    context.rect(left + width * 0.2, top + height * 0.2, width * 0.8, height * 0.8);
   }
-
-  _post_draw(context) {
-    this.drawStroke(context);
-    this.drawText(context);
-  }
-
-  get controls() {}
 
   get nature(){
     return NATURE;
