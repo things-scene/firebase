@@ -8078,6 +8078,21 @@ var NATURE = {
     label: 'Messaging Sender Id',
     name: 'messagingSenderId',
     property: 'messagingSenderId'
+  }, {
+    type: 'string',
+    label: 'Child Data Path',
+    name: 'childDataPath',
+    property: 'childDataPath'
+  }, {
+    type: 'string',
+    label: 'Email Id',
+    name: 'email',
+    property: 'email'
+  }, {
+    type: 'string',
+    label: 'Password',
+    name: 'password',
+    property: 'password'
   }]
 };
 
@@ -8095,34 +8110,61 @@ var Firebase = function (_RectPath) {
   }
 
   _createClass(Firebase, [{
-    key: 'created',
-    value: function created() {
+    key: 'added',
+    value: function added() {
       var _model = this.model,
           apiKey = _model.apiKey,
           authDomain = _model.authDomain,
           databaseURL = _model.databaseURL,
           projectId = _model.projectId,
           storageBucket = _model.storageBucket,
-          messagingSenderId = _model.messagingSenderId;
+          messagingSenderId = _model.messagingSenderId,
+          childDataPath = _model.childDataPath,
+          authToken = _model.authToken,
+          email = _model.email,
+          password = _model.password;
 
+
+      var email = 'test@example.com';
+      var password = 'testpass';
 
       _firebase2.default.initializeApp({ apiKey: apiKey, authDomain: authDomain, databaseURL: databaseURL, projectId: projectId, storageBucket: storageBucket, messagingSenderId: messagingSenderId });
+      // console.log(firebase.app().name);  // "[DEFAULT]"
+
       this._database = _firebase2.default.database();
 
-      console.log(_firebase2.default.app().name); // "[DEFAULT]"
+      var auth = _firebase2.default.auth();
 
-      // var ref = firebase.database().ref('/bluetoothscan');
-      var ref = _firebase2.default.database().ref().child('bluetoothscan');
-      ref.once('value', function (snapshot) {
-        console.log(snapshot);
-        snapshot.forEach(function (childSnapshot) {
-          console.log(childSnapshot.key(), childSnapshot.val());
-        });
+      var self = this;
+
+      auth.onAuthStateChanged(function (firebaseUser) {
+        if (firebaseUser) {
+          // console.log('logged in', firebaseUser);
+          var ref = _firebase2.default.database().ref().child(childDataPath);
+          ref.once('value', function (snapshot) {
+            var data = snapshot.val();
+
+            for (var key in data) {
+              var val = data[key];
+              self.root.variable(key, val);
+              console.log('variable', key, val);
+            }
+          });
+        } else {
+          console.log('not logged in.');
+        }
+      });
+
+      var promise = email ? auth.signInWithEmailAndPassword(email, password) : auth.signInAnonymously();
+
+      promise.catch(function (e) {
+        return console.log(e.message);
       });
     }
   }, {
     key: 'disposed',
     value: function disposed() {
+      _firebase2.default.auth().signOut();
       // this._database && ..
     }
   }, {

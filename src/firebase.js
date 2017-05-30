@@ -9,31 +9,46 @@ const NATURE = {
     label: 'API Key',
     name: 'apiKey',
     property: 'apiKey'
-  },{
+  }, {
     type: 'string',
     label: 'Auth Domain',
     name: 'authDomain',
     property: 'authDomain'
-  },{
+  }, {
     type: 'string',
     label: 'Database URL',
     name: 'databaseURL',
     property: 'databaseURL'
-  },{
+  }, {
     type: 'string',
     label: 'Project ID',
     name: 'projectId',
     property: 'projectId'
-  },{
+  }, {
     type: 'string',
     label: 'Storage Bucket',
     name: 'storageBucket',
     property: 'storageBucket'
-  },{
+  }, {
     type: 'string',
     label: 'Messaging Sender Id',
     name: 'messagingSenderId',
     property: 'messagingSenderId'
+  }, {
+    type: 'string',
+    label: 'Child Data Path',
+    name: 'childDataPath',
+    property: 'childDataPath'
+  }, {
+    type: 'string',
+    label: 'Email Id',
+    name: 'email',
+    property: 'email'
+  }, {
+    type: 'string',
+    label: 'Password',
+    name: 'password',
+    property: 'password'
   }]
 }
 
@@ -41,32 +56,58 @@ var { RectPath, Shape } = scene
 
 export default class Firebase extends RectPath(Shape) {
 
-  created() {
+  added() {
     var {
       apiKey,
       authDomain,
       databaseURL,
       projectId,
       storageBucket,
-      messagingSenderId
+      messagingSenderId,
+      childDataPath,
+      authToken,
+      email,
+      password
     } = this.model
 
+    var email = 'test@example.com';
+    var password = 'testpass';
+
     firebase.initializeApp({ apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId })
+    // console.log(firebase.app().name);  // "[DEFAULT]"
+
     this._database = firebase.database();
 
-    console.log(firebase.app().name);  // "[DEFAULT]"
+    const auth = firebase.auth();
 
-    // var ref = firebase.database().ref('/bluetoothscan');
-    var ref = firebase.database().ref().child('bluetoothscan');
-    ref.once('value', function(snapshot) {
-      console.log(snapshot);
-      snapshot.forEach(function(childSnapshot) {
-        console.log(childSnapshot.key(), childSnapshot.val());
-      });
-    });
+    var self = this
+
+    auth.onAuthStateChanged(firebaseUser => {
+      if(firebaseUser) {
+        // console.log('logged in', firebaseUser);
+        var ref = firebase.database().ref().child(childDataPath);
+        ref.once('value', function(snapshot) {
+          var data = snapshot.val();
+
+          for(let key in data) {
+            let val = data[key]
+            self.root.variable(key, val);
+            console.log('variable', key, val)
+          }
+        });
+      } else {
+        console.log('not logged in.');
+      }
+
+    })
+
+    const promise = email ? auth.signInWithEmailAndPassword(email, password) : auth.signInAnonymously();
+
+    promise.catch(e => console.log(e.message))
   }
 
   disposed() {
+    firebase.auth().signOut();
     // this._database && ..
   }
 

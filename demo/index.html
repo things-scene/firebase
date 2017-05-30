@@ -11,11 +11,15 @@
     <link rel="import" href="../../things-scene-viewer/things-scene-layer.html">
     <link rel="import" href="../../things-scene-viewer/things-scene-handler.html">
 
-    <link rel="import" href="../../things-designer-elements/things-editor-color.html">
+    <!--<link rel="import" href="../../things-designer-elements/things-editor-color.html">
     <link rel="import" href="../../things-designer-elements/things-editor-color-stops.html">
-    <link rel="import" href="../../things-scene-modeler/things-scene-properties.html">
+    <link rel="import" href="../../things-scene-modeler/things-scene-properties.html">-->
+
+    <link rel="import" href="../../things-designer-elements/things-editor-properties.html">
 
     <link rel="import" href="./things-scene-firebase.html">
+
+    <link rel="import" href="../../things-theme/things-point-theme.html">
 
     <style is="custom-style">
 
@@ -42,16 +46,8 @@
         <things-scene-handler type="move-handler"></things-scene-handler>
       </things-scene-viewer>
 
-      <things-scene-properties scene="[[scene]]"
-                               selected="[[selected]]"
-                               model="{{target}}"
-                               bounds="{{bounds}}">
-        <fieldset class="column-double">
-          <legend>firebase style</legend>
-          <label>value</label>
-          <input type="number" value-as-number="{{target.value::change}}" min="0" max="100" step="1"/>
-        </fieldset>
-      </things-scene-properties>
+      <things-editor-properties id='props' target="{{props}}" props="[[selected.0.nature.properties]]">
+      </things-editor-properties>
 
     </template>
 
@@ -59,28 +55,168 @@
       window.addEventListener('WebComponentsReady', function(e) {
         var app = document.querySelector('#app')
 
+        app.props = {}
+
+        setTimeout(function() {
+          app.scene.on('selected', function(after) {
+            var target = after[0]
+            var props = {}
+            if(target) {
+              target.nature.properties.forEach(function(prop) {
+                var property = prop.property
+                props[property] = target.model[property]
+              })
+            }
+            app.props = props
+          });
+        });
+
+        app.$.props.addEventListener('change', function() {
+          app.selected[0].set(app.props)
+        });
+
         app.model = {
-          width: 500,
-          height: 500,
+          width: 800,
+          height: 800,
           components: [{
+            type: "rect",
+            left: 150,
+            top: 150,
+            rotation: 10,
+            width: 20,
+            height: 20,
+            strokeStyle: "black",
+            templatePrefix: "RECT-",
+            retention: 10000,
+            data: {
+              location: {
+                x: 100,
+                y: 100
+              },
+              status: 1
+            },
+            animation: {
+              oncreate: {
+                type: "rotation",
+                duration: 2000,
+                tilt: 30,
+                cycle: 50,
+                theta: 3.14,
+                roundtrip: true,
+                scale: 1.3,
+                repeat: false
+              }
+            },
+            mappings: [{
+              accessor: "location",
+              target: "(self)",
+              property: "location",
+              rule: "value"
+            }, {
+              accessor: "status",
+              target: "(self)",
+              property: "fillStyle",
+              rule: "map",
+              param: {
+                1: "blue",
+                2: "green",
+                3: "red",
+                4: "gray",
+                5: "lightgray",
+                6: "darkgray",
+                7: "yellow",
+                8: "white",
+                9: "black",
+                default: "cyan"
+              }
+            }, {
+              accessor: "status",
+              target: "(self)",
+              property: "rotation",
+              rule: "value"
+            }]
+          }, {
+            type: "ellipse",
+            strokeStyle: "black",
+            cx: 50,
+            cy: 50,
+            rx: 10,
+            ry: 10,
+            templatePrefix: "CIRC-",
+            retention: 10000,
+            animation: {
+              oncreate: {
+                type: "heartbeat",
+                duration: 2000,
+                tilt: 30,
+                cycle: 50,
+                theta: 1,
+                roundtrip: true,
+                scale: 1.3,
+                repeat: false
+              }
+            },
+            data: {
+              location: {
+                x: 200,
+                y: 200
+              },
+              status: 2
+            },
+            mappings: [{
+              accessor: "location",
+              target: "(self)",
+              property: "location",
+              rule: "value"
+            }, {
+              accessor: "status",
+              target: "(self)",
+              property: "fillStyle",
+              rule: "map",
+              param: {
+                1: "blue",
+                2: "green",
+                3: "red",
+                4: "gray",
+                5: "lightgray",
+                6: "darkgray",
+                7: "yellow",
+                8: "white",
+                9: "black",
+                default: "cyan"
+              }
+            }]
+          }, {
             type: 'firebase',
-            top: 100,
-            left: 100,
-            width:200,
-            height: 70,
-            fontSize: 40,
+            top: 50,
+            left: 50,
+            width: 30,
+            height: 30,
             fillStyle: '#00ff00',
-            fontColor: '#FF0000',
             strokeStyle: '#000',
-            lineWidth: 5,
-            apiKey: "AIzaSyC1udTu-2y7fxcCZxyYLrai9da8T_bR-vc",
-            authDomain: "bluetoothscan.firebaseapp.com",
-            databaseURL: "https://bluetoothscan.firebaseio.com",
-            projectId: "bluetoothscan",
-            storageBucket: "bluetoothscan.appspot.com",
-            messagingSenderId: "618143112477"
+            lineWidth: 2,
+
+            // apiKey: "AIzaSyC1udTu-2y7fxcCZxyYLrai9da8T_bR-vc",
+            // authDomain: "bluetoothscan.firebaseapp.com",
+            // databaseURL: "https://bluetoothscan.firebaseio.com",
+            // projectId: "bluetoothscan",
+            // storageBucket: "bluetoothscan.appspot.com",
+            // messagingSenderId: "618143112477",
+            // childDataPath: 'bluetoothscan'
+
+            apiKey: "AIzaSyCfqM_viu8mcuUbIupgv0Qh2xD6NWf1thA",
+            authDomain: "things-board-399e6.firebaseapp.com",
+            databaseURL: "https://things-board-399e6.firebaseio.com",
+            projectId: "things-board-399e6",
+            storageBucket: "things-board-399e6.appspot.com",
+            messagingSenderId: "74237077394",
+            childDataPath: "boards/template/data",
+            email: 'test@example.com',
+            password: 'testpass'
+            // email: 'heartyoh@gmail.com',
+            // password: 'skatkdgur1'
           }]
-        }
+        };
       });
     </script>
   </body>
