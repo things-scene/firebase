@@ -8032,9 +8032,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _firebase = require('firebase');
+var _firebaseBrowser = require('firebase/firebase-browser');
 
-var _firebase2 = _interopRequireDefault(_firebase);
+var _firebaseBrowser2 = _interopRequireDefault(_firebaseBrowser);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -8128,12 +8128,12 @@ var Firebase = function (_RectPath) {
       var email = 'test@example.com';
       var password = 'testpass';
 
-      _firebase2.default.initializeApp({ apiKey: apiKey, authDomain: authDomain, databaseURL: databaseURL, projectId: projectId, storageBucket: storageBucket, messagingSenderId: messagingSenderId });
+      _firebaseBrowser2.default.initializeApp({ apiKey: apiKey, authDomain: authDomain, databaseURL: databaseURL, projectId: projectId, storageBucket: storageBucket, messagingSenderId: messagingSenderId });
       // console.log(firebase.app().name);  // "[DEFAULT]"
 
-      this._database = _firebase2.default.database();
+      this._database = _firebaseBrowser2.default.database();
 
-      var auth = _firebase2.default.auth();
+      var auth = _firebaseBrowser2.default.auth();
 
       var self = this;
 
@@ -8149,7 +8149,7 @@ var Firebase = function (_RectPath) {
       auth.onAuthStateChanged(function (firebaseUser) {
         if (firebaseUser) {
           // console.log('logged in', firebaseUser);
-          var ref = _firebase2.default.database().ref().child(childDataPath);
+          var ref = _firebaseBrowser2.default.database().ref().child(childDataPath);
           ref.once('value', _);
           ref.on('value', _);
         } else {
@@ -8166,7 +8166,7 @@ var Firebase = function (_RectPath) {
   }, {
     key: 'disposed',
     value: function disposed() {
-      _firebase2.default.auth().signOut();
+      _firebaseBrowser2.default.auth().signOut();
       // this._database && ..
     }
   }, {
@@ -8209,7 +8209,7 @@ exports.default = Firebase;
 
 scene.Component.register('firebase', Firebase);
 
-},{"firebase":9}],56:[function(require,module,exports){
+},{"firebase/firebase-browser":9}],56:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -8227,4 +8227,4 @@ Object.defineProperty(exports, 'Firebase', {
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-},{"./firebase":55}]},{},[55,56]);
+},{"./firebase":55}]},{},[56]);

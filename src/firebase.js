@@ -1,4 +1,4 @@
-import firebase from 'firebase'
+import firebase from 'firebase/firebase-browser'
 
 const NATURE = {
   mutable: false,
