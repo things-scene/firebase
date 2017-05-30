@@ -11,15 +11,9 @@
     <link rel="import" href="../../things-scene-viewer/things-scene-layer.html">
     <link rel="import" href="../../things-scene-viewer/things-scene-handler.html">
 
-    <!--<link rel="import" href="../../things-designer-elements/things-editor-color.html">
-    <link rel="import" href="../../things-designer-elements/things-editor-color-stops.html">
-    <link rel="import" href="../../things-scene-modeler/things-scene-properties.html">-->
-
     <link rel="import" href="../../things-designer-elements/things-editor-properties.html">
 
     <link rel="import" href="./things-scene-firebase.html">
-
-    <link rel="import" href="../../things-theme/things-point-theme.html">
 
     <style is="custom-style">
 
@@ -46,6 +40,7 @@
         <things-scene-handler type="move-handler"></things-scene-handler>
       </things-scene-viewer>
 
+      <p>Properties</p>
       <things-editor-properties id='props' target="{{props}}" props="[[selected.0.nature.properties]]">
       </things-editor-properties>
 
@@ -196,14 +191,6 @@
             strokeStyle: '#000',
             lineWidth: 2,
 
-            // apiKey: "AIzaSyC1udTu-2y7fxcCZxyYLrai9da8T_bR-vc",
-            // authDomain: "bluetoothscan.firebaseapp.com",
-            // databaseURL: "https://bluetoothscan.firebaseio.com",
-            // projectId: "bluetoothscan",
-            // storageBucket: "bluetoothscan.appspot.com",
-            // messagingSenderId: "618143112477",
-            // childDataPath: 'bluetoothscan'
-
             apiKey: "AIzaSyCfqM_viu8mcuUbIupgv0Qh2xD6NWf1thA",
             authDomain: "things-board-399e6.firebaseapp.com",
             databaseURL: "https://things-board-399e6.firebaseio.com",
@@ -213,8 +200,6 @@
             childDataPath: "boards/template/data",
             email: 'test@example.com',
             password: 'testpass'
-            // email: 'heartyoh@gmail.com',
-            // password: 'skatkdgur1'
           }]
         };
       });

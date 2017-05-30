@@ -8143,7 +8143,6 @@ var Firebase = function (_RectPath) {
         for (var key in data) {
           var val = data[key];
           self.root.variable(key, val);
-          console.log('variable', key, val);
         }
       }
 

@@ -88,7 +88,6 @@ export default class Firebase extends RectPath(Shape) {
       for(let key in data) {
         let val = data[key]
         self.root.variable(key, val);
-        console.log('variable', key, val)
       }
     }
 
