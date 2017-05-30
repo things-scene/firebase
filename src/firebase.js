@@ -82,19 +82,22 @@ export default class Firebase extends RectPath(Shape) {
 
     var self = this
 
+    function _(snapshot) {
+      var data = snapshot.val();
+
+      for(let key in data) {
+        let val = data[key]
+        self.root.variable(key, val);
+        console.log('variable', key, val)
+      }
+    }
+
     auth.onAuthStateChanged(firebaseUser => {
       if(firebaseUser) {
         // console.log('logged in', firebaseUser);
         var ref = firebase.database().ref().child(childDataPath);
-        ref.once('value', function(snapshot) {
-          var data = snapshot.val();
-
-          for(let key in data) {
-            let val = data[key]
-            self.root.variable(key, val);
-            console.log('variable', key, val)
-          }
-        });
+        ref.once('value', _);
+        ref.on('value', _);
       } else {
         console.log('not logged in.');
       }

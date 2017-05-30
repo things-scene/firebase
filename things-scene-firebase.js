@@ -8137,19 +8137,22 @@ var Firebase = function (_RectPath) {
 
       var self = this;
 
+      function _(snapshot) {
+        var data = snapshot.val();
+
+        for (var key in data) {
+          var val = data[key];
+          self.root.variable(key, val);
+          console.log('variable', key, val);
+        }
+      }
+
       auth.onAuthStateChanged(function (firebaseUser) {
         if (firebaseUser) {
           // console.log('logged in', firebaseUser);
           var ref = _firebase2.default.database().ref().child(childDataPath);
-          ref.once('value', function (snapshot) {
-            var data = snapshot.val();
-
-            for (var key in data) {
-              var val = data[key];
-              self.root.variable(key, val);
-              console.log('variable', key, val);
-            }
-          });
+          ref.once('value', _);
+          ref.on('value', _);
         } else {
           console.log('not logged in.');
         }
