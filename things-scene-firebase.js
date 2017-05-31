@@ -8157,7 +8157,6 @@ var Firebase = function (_RectPath) {
         if (firebaseUser) {
           // console.log('logged in', firebaseUser);
           var ref = _firebaseBrowser2.default.database().ref().child(childDataPath);
-          ref.once('value', _);
           ref.on('value', _);
         } else {
           console.log('not logged in.');

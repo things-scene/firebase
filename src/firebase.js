@@ -102,7 +102,6 @@ export default class Firebase extends RectPath(Shape) {
       if(firebaseUser) {
         // console.log('logged in', firebaseUser);
         var ref = firebase.database().ref().child(childDataPath);
-        ref.once('value', _);
         ref.on('value', _);
       } else {
         console.log('not logged in.');
