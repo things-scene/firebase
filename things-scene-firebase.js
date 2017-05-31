@@ -8132,13 +8132,10 @@ var Firebase = function (_RectPath) {
           password = _model.password;
 
 
-      var email = 'test@example.com';
-      var password = 'testpass';
-
       _firebaseBrowser2.default.initializeApp({ apiKey: apiKey, authDomain: authDomain, databaseURL: databaseURL, projectId: projectId, storageBucket: storageBucket, messagingSenderId: messagingSenderId });
       // console.log(firebase.app().name);  // "[DEFAULT]"
 
-      this._database = _firebaseBrowser2.default.database();
+      // this._database = firebase.database();
 
       var auth = _firebaseBrowser2.default.auth();
 

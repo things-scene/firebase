@@ -77,13 +77,10 @@ export default class Firebase extends RectPath(Shape) {
       password
     } = this.model
 
-    var email = 'test@example.com';
-    var password = 'testpass';
-
     firebase.initializeApp({ apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId })
     // console.log(firebase.app().name);  // "[DEFAULT]"
 
-    this._database = firebase.database();
+    // this._database = firebase.database();
 
     const auth = firebase.auth();
 
