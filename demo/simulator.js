@@ -11,8 +11,8 @@ firebase.initializeApp({
 
 var email = 'test@example.com';
 var password = 'testpass';
-var mo_path = "boards/template/data/CIRC-02";
-var simulation_path = "boards/template/simulation/CIRC-02";
+var mo_path = "boards/template/data/CIRC-03";
+var simulation_path = "boards/template/simulation/CIRC-03";
 
 this._database = firebase.database();
 
