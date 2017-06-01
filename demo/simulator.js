@@ -11,7 +11,8 @@ firebase.initializeApp({
 
 var email = 'test@example.com';
 var password = 'testpass';
-var childDataPath = "boards/template/data";
+var mo_path = "boards/template/data/CIRC-02";
+var simulation_path = "boards/template/simulation/CIRC-02";
 
 this._database = firebase.database();
 
@@ -20,20 +21,23 @@ const auth = firebase.auth();
 var self = this
 var exit = false
 
-function _(snapshot) {
-  var data = snapshot.val();
-
-  for (let key in data) {
-    let val = data[key]
-    console.log('DATA', key, val);
-  }
-}
-
 auth.onAuthStateChanged(firebaseUser => {
   if (firebaseUser) {
     console.log('logged in');
-    var ref = firebase.database().ref().child(childDataPath);
-    ref.on('value', _);
+    var ref_mo = firebase.database().ref().child(mo_path);
+    var ref_sim = firebase.database().ref().child(simulation_path);
+    setInterval(() => {
+      var data = {
+        location: {
+          x: Math.round(Math.random() * 400),
+          y: Math.round(Math.random() * 400)
+        },
+        status: Math.floor(Math.random() * 5)
+      }
+      ref_mo.set(data); // Moving Object가 없는 경우에는 set을 해야할 것 같음.
+      // ref_mo.update(data);
+      ref_sim.push(data);
+    }, 1000)
   } else {
     if (exit) {
       console.log('logged out, about to exit');
@@ -49,4 +53,4 @@ promise.catch(e => console.log(e.message))
 setTimeout(() => {
   exit = true;
   firebase.auth().signOut();
-}, 10000);
+}, 100000);
