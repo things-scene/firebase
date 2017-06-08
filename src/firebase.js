@@ -64,6 +64,22 @@ export default class Firebase extends RectPath(Shape) {
       Firebase.image.src = FIREBASE_IMAGE
     }
 
+    if (!this.app.isViewMode)
+      return;
+
+    var self = this;
+
+    if (firebase.apps.length > 0) {
+      firebase.app().delete().then(function () {
+        self._initFirebase();
+      });
+      return
+    }
+
+    this._initFirebase();
+  }
+
+  _initFirebase() {
     var {
       apiKey,
       authDomain,
@@ -113,6 +129,7 @@ export default class Firebase extends RectPath(Shape) {
 
   disposed() {
     firebase.auth().signOut();
+    firebase.app().delete();
     // this._database && ..
   }
 
