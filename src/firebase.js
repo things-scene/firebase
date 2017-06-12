@@ -58,12 +58,16 @@ var { RectPath, Shape } = scene
 
 export default class Firebase extends RectPath(Shape) {
 
-  added() {
-    if(!Firebase.image) {
-      Firebase.image = new Image()
-      Firebase.image.src = FIREBASE_IMAGE
+  static get image() {
+    if(!Firebase._image) {
+      Firebase._image = new Image()
+      Firebase._image.src = FIREBASE_IMAGE
     }
 
+    return Firebase._image
+  }
+
+  added() {
     if (!this.app.isViewMode)
       return;
 
