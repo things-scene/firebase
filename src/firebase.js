@@ -1,3 +1,6 @@
+/*
+ * Copyright © HatioLab Inc. All rights reserved.
+ */
 import firebase from 'firebase/firebase-browser'
 
 const NATURE = {
