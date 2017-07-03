@@ -149,6 +149,7 @@ export default class Firebase extends RectPath(Shape) {
       height
     } = this.bounds;
 
+    context.beginPath();
     context.drawImage(Firebase.image, left, top, width, height);
   }
 
