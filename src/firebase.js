@@ -9,47 +9,47 @@ const NATURE = {
   rotatable: true,
   properties : [{
     type: 'string',
-    label: 'API Key',
+    label: 'api-key',
     name: 'apiKey',
     property: 'apiKey'
   }, {
     type: 'string',
-    label: 'Auth Domain',
+    label: 'auth-domain',
     name: 'authDomain',
     property: 'authDomain'
   }, {
     type: 'string',
-    label: 'Database URL',
+    label: 'database-url',
     name: 'databaseURL',
     property: 'databaseURL'
   }, {
     type: 'string',
-    label: 'Project ID',
+    label: 'project-id',
     name: 'projectId',
     property: 'projectId'
   }, {
     type: 'string',
-    label: 'Storage Bucket',
+    label: 'storage-bucket',
     name: 'storageBucket',
     property: 'storageBucket'
   }, {
     type: 'string',
-    label: 'Messaging Sender Id',
+    label: 'messaging-sender-id',
     name: 'messagingSenderId',
     property: 'messagingSenderId'
   }, {
     type: 'string',
-    label: 'Child Data Path',
+    label: 'child-data-path',
     name: 'childDataPath',
     property: 'childDataPath'
   }, {
     type: 'string',
-    label: 'Email Id',
+    label: 'email-id',
     name: 'email',
     property: 'email'
   }, {
     type: 'string',
-    label: 'Password',
+    label: 'password',
     name: 'password',
     property: 'password'
   }]
