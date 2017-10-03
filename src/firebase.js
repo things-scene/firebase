@@ -136,8 +136,12 @@ export default class Firebase extends RectPath(Shape) {
 
   dispose() {
     if(this.app.isViewMode) {
-      firebase.auth().signOut()
-      firebase.app().delete();
+      try {
+        firebase.auth().signOut()
+        firebase.app().delete();
+      } catch(e) {
+        console.error(e)
+      }
     }
 
     super.dispose()
