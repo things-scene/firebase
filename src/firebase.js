@@ -79,6 +79,10 @@ export default class Firebase extends RectPath(Shape) {
     this._initFirebase();
   }
 
+  _onValue(snapshot) {
+    this.root.data = snapshot.val();    
+  }
+
   _initFirebase() {
     var {
       apiKey,
@@ -93,27 +97,23 @@ export default class Firebase extends RectPath(Shape) {
       password
     } = this.model
 
-    this._firebase_app = firebase.initializeApp({ apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId }, 'FBAPP-' + idx)
-
-    const auth = this._firebase_app.auth();
-
     var self = this
+    
+    this._firebase_app = firebase.initializeApp({ apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId }, 'FBAPP-' + idx)
+    this._firebase_auth = firebase.auth(this._firebase_app);
 
-    function _(snapshot) {
-      self.root.data = snapshot.val();
-    }
-
-    auth.onAuthStateChanged(firebaseUser => {
+    this._firebase_auth.onAuthStateChanged(firebaseUser => {
       if(firebaseUser) {
         console.log('logged in', firebaseUser);
-        var ref = this._firebase_app.database().ref().child(childDataPath);
-        ref.on('value', _);
+        self._firebase_ref = this._firebase_app.database().ref().child(childDataPath);
+        self._firebase_ref.on('value', self._onValue, self);
       } else {
         console.log('not logged in.');
       }
     })
 
-    const promise = email ? auth.signInWithEmailAndPassword(email, password) : auth.signInAnonymously();
+    var promise = email ? this._firebase_auth.signInWithEmailAndPassword(email, password) 
+    : this._firebase_auth.signInAnonymously();
 
     promise.catch(e => console.log(e.message))
   }
@@ -121,14 +121,19 @@ export default class Firebase extends RectPath(Shape) {
   dispose() {
     if(this._firebase_app) {
       try {
-        this._firebase_app.auth().signOut()
+        this._firebase_ref.off('value', this._onValue, this);
+        this._firebase_auth.signOut()
         this._firebase_app.delete();
+
+        console.log('disposed - firebase')
       } catch(e) {
         console.error(e)
       }
     }
 
-    this._firebase_app = null;
+    delete this._firebase_auth
+    delete this._firebase_ref
+    delete this._firebase_app
 
     super.dispose()
   }
