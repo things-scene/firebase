@@ -59,6 +59,8 @@ const FIREBASE_IMAGE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CA
 
 var { RectPath, Shape } = scene
 
+var idx = 0
+
 export default class Firebase extends RectPath(Shape) {
 
   static get image() {
@@ -71,17 +73,8 @@ export default class Firebase extends RectPath(Shape) {
   }
 
   added() {
-    if (!this.app.isViewMode)
+    if (!this.app.isViewMode || this._firebase_app)
       return;
-
-    var self = this;
-
-    if (firebase.apps.length > 0) {
-      firebase.app().delete().then(function () {
-        self._initFirebase();
-      });
-      return
-    }
 
     this._initFirebase();
   }
@@ -100,33 +93,24 @@ export default class Firebase extends RectPath(Shape) {
       password
     } = this.model
 
-    firebase.initializeApp({ apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId })
-    // console.log(firebase.app().name);  // "[DEFAULT]"
+    this._firebase_app = firebase.initializeApp({ apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId }, 'FBAPP-' + idx)
 
-    // this._database = firebase.database();
-
-    const auth = firebase.auth();
+    const auth = this._firebase_app.auth();
 
     var self = this
 
     function _(snapshot) {
-      var data = snapshot.val();
-
-      for(let key in data) {
-        let val = data[key]
-        self.root.variable(key, val);
-      }
+      self.root.data = snapshot.val();
     }
 
     auth.onAuthStateChanged(firebaseUser => {
       if(firebaseUser) {
-        // console.log('logged in', firebaseUser);
-        var ref = firebase.database().ref().child(childDataPath);
+        console.log('logged in', firebaseUser);
+        var ref = this._firebase_app.database().ref().child(childDataPath);
         ref.on('value', _);
       } else {
         console.log('not logged in.');
       }
-
     })
 
     const promise = email ? auth.signInWithEmailAndPassword(email, password) : auth.signInAnonymously();
@@ -135,14 +119,16 @@ export default class Firebase extends RectPath(Shape) {
   }
 
   dispose() {
-    if(this.app.isViewMode) {
+    if(this._firebase_app) {
       try {
-        firebase.auth().signOut()
-        firebase.app().delete();
+        this._firebase_app.auth().signOut()
+        this._firebase_app.delete();
       } catch(e) {
         console.error(e)
       }
     }
+
+    this._firebase_app = null;
 
     super.dispose()
   }
