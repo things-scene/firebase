@@ -121,9 +121,9 @@ export default class Firebase extends DataSource(RectPath(Shape)) {
   dispose() {
     if (this._firebase_app) {
       try {
-        this._firebase_ref.off('value', this._onValue, this);
-        this._firebase_auth.signOut()
-        this._firebase_app.delete();
+        this._firebase_ref && this._firebase_ref.off('value', this._onValue, this);
+        this._firebase_auth && this._firebase_auth.signOut()
+        this._firebase_app && this._firebase_app.delete();
 
         console.log('disposed - firebase')
       } catch (e) {
