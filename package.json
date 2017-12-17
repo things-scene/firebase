@@ -1,5 +1,5 @@
 {
-  "name": "@things-elementsthings-scene-firebase",
+  "name": "@things-elements/things-scene-firebase",
   "flat": true,
   "version": "0.1.10",
   "description": "Firebase datasource component for things-scene.",
