@@ -1,9 +1,9 @@
 {
   "name": "@things-elements/things-scene-firebase",
   "flat": true,
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "Firebase datasource component for things-scene.",
-  "main": "index.js",
+  "main": "things-scene-firebase-min.js",
   "directories": {
     "test": "test"
   },
