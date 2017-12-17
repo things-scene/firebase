@@ -1,5 +1,6 @@
 {
-  "name": "things-scene-firebase",
+  "name": "@things-elementsthings-scene-firebase",
+  "flat": true,
   "version": "0.1.10",
   "description": "Firebase datasource component for things-scene.",
   "main": "index.js",
@@ -40,5 +41,7 @@
     "node-canvas": "Automattic/node-canvas",
     "firebase": "^4.0.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@hatiolab/things-scene":"^2.2.35"
+  }
 }
