@@ -101,7 +101,7 @@ export default class Firebase extends DataSource(RectPath(Shape)) {
 
     var self = this
 
-    this._firebase_app = firebase.initializeApp({ apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId }, 'FBAPP-' + idx)
+    this._firebase_app = firebase.initializeApp({ apiKey, authDomain, databaseURL, projectId, storageBucket, messagingSenderId }, 'FBAPP-' + (++idx));
     this._firebase_auth = firebase.auth(this._firebase_app);
 
     this._firebase_auth.onAuthStateChanged(firebaseUser => {
