@@ -1,5 +1,3 @@
-import locales from './locales';
-
 import icon from './assets/firebase.png';
 
 var templates = [{
@@ -26,6 +24,5 @@ var templates = [{
 }];
 
 export default {
-  templates,
-  locales
+  templates
 };
